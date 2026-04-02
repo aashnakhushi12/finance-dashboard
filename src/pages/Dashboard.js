@@ -1,8 +1,12 @@
+// src/pages/Dashboard.js
 import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import SummaryCard from "../components/SummaryCard";
 import TransactionTable from "../components/TransactionTable";
 import RoleSwitcher from "../components/RoleSwitcher";
+import BalanceLineChart from "../components/charts/BalanceLineChart";
+import SpendingPieChart from "../components/charts/SpendingPieChart";
+import Insights from "../components/Insights";
 
 const Dashboard = () => {
   const { transactions } = useContext(AppContext);
@@ -26,6 +30,17 @@ const Dashboard = () => {
         <SummaryCard title="Income" value={income} />
         <SummaryCard title="Expenses" value={expenses} />
       </div>
+
+      {/* Charts */}
+      <div className="flex">
+        <BalanceLineChart />
+        <SpendingPieChart />
+      </div>
+
+      {/* Insights */}
+      <Insights />
+
+      {/* Transactions */}
       <TransactionTable />
     </div>
   );
