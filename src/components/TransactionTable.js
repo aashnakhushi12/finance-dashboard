@@ -5,7 +5,6 @@ const TransactionTable = () => {
   const { transactions } = useContext(AppContext);
   const [search, setSearch] = useState("");
 
-  // Filter transactions based on search input
   const filteredTransactions = transactions.filter(
     (t) =>
       t.category.toLowerCase().includes(search.toLowerCase()) ||
@@ -16,8 +15,6 @@ const TransactionTable = () => {
   return (
     <div className="card">
       <h3>Transactions</h3>
-
-      {/* Search Input */}
       <input
         type="text"
         placeholder="Search transactions by date, amount, or category..."
@@ -25,8 +22,6 @@ const TransactionTable = () => {
         onChange={(e) => setSearch(e.target.value)}
         style={{ marginBottom: "10px", padding: "5px", width: "100%" }}
       />
-
-      {/* Transactions Table */}
       <table width="100%" border="1" cellPadding="5" cellSpacing="0">
         <thead>
           <tr>
