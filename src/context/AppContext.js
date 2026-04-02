@@ -1,37 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
+import { transactionsData } from "../data/transactions";
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [role, setRole] = useState("viewer");
 
+  // Use data file instead of hardcoded array
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem("transactions");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          {
-            id: 1,
-            date: "2026-04-01",
-            amount: 5000,
-            category: "Salary",
-            type: "income",
-          },
-          {
-            id: 2,
-            date: "2026-04-02",
-            amount: 200,
-            category: "Food",
-            type: "expense",
-          },
-          {
-            id: 3,
-            date: "2026-04-03",
-            amount: 1000,
-            category: "Shopping",
-            type: "expense",
-          },
-        ];
+    return saved ? JSON.parse(saved) : transactionsData;
   });
 
   const [darkMode, setDarkMode] = useState(() => {
@@ -39,17 +17,19 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : false;
   });
 
+  // Save transactions
   useEffect(() => {
     localStorage.setItem("transactions", JSON.stringify(transactions));
   }, [transactions]);
 
+  // Save dark mode
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  const addTransaction = (transaction) => {
-    const newTransaction = { id: Date.now(), ...transaction };
-    setTransactions((prev) => [...prev, newTransaction]);
+  // Add transaction
+  const addTransaction = (tx) => {
+    setTransactions((prev) => [...prev, { ...tx, id: Date.now() }]);
   };
 
   return (

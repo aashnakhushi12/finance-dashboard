@@ -5,16 +5,9 @@ const DarkModeToggle = () => {
   const { darkMode, setDarkMode } = useContext(AppContext);
 
   return (
-    <div style={{ margin: "10px 0" }}>
-      <label>
-        <input
-          type="checkbox"
-          checked={darkMode}
-          onChange={() => setDarkMode(!darkMode)}
-        />{" "}
-        Dark Mode
-      </label>
-    </div>
+    <button onClick={() => setDarkMode(!darkMode)}>
+      {darkMode ? "Light Mode" : "Dark Mode"}
+    </button>
   );
 };
 

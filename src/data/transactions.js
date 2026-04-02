@@ -6,12 +6,32 @@ export const transactionsData = [
     category: "Salary",
     type: "income",
   },
-  { id: 2, date: "2026-04-02", amount: 200, category: "Food", type: "expense" },
+  {
+    id: 2,
+    date: "2026-04-02",
+    amount: 200,
+    category: "Food",
+    type: "expense",
+  },
   {
     id: 3,
     date: "2026-04-03",
     amount: 1000,
     category: "Shopping",
     type: "expense",
+  },
+  {
+    id: 4,
+    date: "2026-04-04",
+    amount: 300,
+    category: "Transport",
+    type: "expense",
+  },
+  {
+    id: 5,
+    date: "2026-04-05",
+    amount: 1500,
+    category: "Freelance",
+    type: "income",
   },
 ];

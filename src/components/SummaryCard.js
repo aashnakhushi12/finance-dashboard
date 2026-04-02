@@ -1,12 +1,8 @@
-import React from "react";
-
-const SummaryCard = ({ title, value }) => {
+export default function SummaryCard({ title, value }) {
   return (
     <div className="card">
-      <h3>{title}</h3>
-      <p>₹{value}</p>
+      <p style={{ fontSize: "14px", color: "#6b7280" }}>{title}</p>
+      <h2 style={{ fontSize: "28px", margin: "5px 0" }}>₹{value}</h2>
     </div>
   );
-};
-
-export default SummaryCard;
+}

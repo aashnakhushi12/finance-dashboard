@@ -1,50 +1,63 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
-const Insights = () => {
+export default function Insights() {
   const { transactions } = useContext(AppContext);
 
   // Highest spending category
-  const categoryTotals = {};
-  transactions
-    .filter((t) => t.type === "expense")
-    .forEach((t) => {
-      if (categoryTotals[t.category]) categoryTotals[t.category] += t.amount;
-      else categoryTotals[t.category] = t.amount;
-    });
-  const highestCategory = Object.keys(categoryTotals).reduce(
-    (a, b) => (categoryTotals[a] > categoryTotals[b] ? a : b),
-    "None",
-  );
+  const categoryMap = {};
 
-  // Monthly comparison
-  const monthTotals = {};
   transactions.forEach((t) => {
-    const month = t.date.slice(0, 7); // YYYY-MM
-    if (!monthTotals[month]) monthTotals[month] = { income: 0, expense: 0 };
-    if (t.type === "income") monthTotals[month].income += t.amount;
-    else monthTotals[month].expense += t.amount;
+    if (t.type === "expense") {
+      categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount;
+    }
+  });
+
+  let highestCategory = "N/A";
+  let max = 0;
+
+  for (let cat in categoryMap) {
+    if (categoryMap[cat] > max) {
+      max = categoryMap[cat];
+      highestCategory = cat;
+    }
+  }
+
+  // Monthly summary
+  const monthly = {};
+
+  transactions.forEach((t) => {
+    const month = t.date.slice(0, 7);
+
+    if (!monthly[month]) {
+      monthly[month] = { income: 0, expense: 0 };
+    }
+
+    if (t.type === "income") {
+      monthly[month].income += t.amount;
+    } else {
+      monthly[month].expense += t.amount;
+    }
   });
 
   return (
-    <div className="card">
+    <div>
       <h3>Insights</h3>
+
       <p>
         <strong>Highest Spending Category:</strong> {highestCategory}
       </p>
+
       <p>
         <strong>Monthly Comparison:</strong>
       </p>
-      <ul>
-        {Object.keys(monthTotals).map((month) => (
-          <li key={month}>
-            {month}: Income ₹{monthTotals[month].income}, Expense ₹
-            {monthTotals[month].expense}
-          </li>
-        ))}
-      </ul>
+
+      {Object.keys(monthly).map((month) => (
+        <p key={month}>
+          {month}: Income ₹{monthly[month].income}, Expense ₹
+          {monthly[month].expense}
+        </p>
+      ))}
     </div>
   );
-};
-
-export default Insights;
+}

@@ -9,43 +9,52 @@ import SpendingPieChart from "../components/charts/SpendingPieChart";
 import Insights from "../components/Insights";
 import DarkModeToggle from "../components/DarkModeToggle";
 
-const Dashboard = () => {
+export default function Dashboard() {
   const { transactions } = useContext(AppContext);
 
   const income = transactions
     .filter((t) => t.type === "income")
     .reduce((a, b) => a + b.amount, 0);
-  const expenses = transactions
+  const expense = transactions
     .filter((t) => t.type === "expense")
     .reduce((a, b) => a + b.amount, 0);
-  const balance = income - expenses;
 
   return (
     <div className="container">
-      <h1>Finance Dashboard</h1>
+      <h1>💰 Finance Dashboard</h1>
 
-      <RoleSwitcher />
-
-      <DarkModeToggle />
-
-      <div className="flex">
-        <SummaryCard title="Balance" value={balance} />
-        <SummaryCard title="Income" value={income} />
-        <SummaryCard title="Expenses" value={expenses} />
+      <div className="flex" style={{ justifyContent: "space-between" }}>
+        <RoleSwitcher />
+        <DarkModeToggle />
       </div>
 
+      {/* Summary */}
+      <div className="flex">
+        <SummaryCard title="Balance" value={income - expense} />
+        <SummaryCard title="Income" value={income} />
+        <SummaryCard title="Expenses" value={expense} />
+      </div>
+
+      {/* Admin */}
       <AddTransaction />
 
+      {/* Charts */}
       <div className="flex">
-        <BalanceLineChart />
-        <SpendingPieChart />
+        <div className="card">
+          <BalanceLineChart />
+        </div>
+        <div className="card">
+          <SpendingPieChart />
+        </div>
       </div>
 
-      <Insights />
+      {/* Insights */}
+      <div className="card">
+        <Insights />
+      </div>
 
+      {/* Table */}
       <TransactionTable />
     </div>
   );
-};
-
-export default Dashboard;
+}

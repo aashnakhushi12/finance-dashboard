@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
-const AddTransaction = () => {
+export default function AddTransaction() {
   const { role, addTransaction } = useContext(AppContext);
+
   const [form, setForm] = useState({
     date: "",
     amount: "",
@@ -10,52 +11,42 @@ const AddTransaction = () => {
     type: "expense",
   });
 
-  if (role !== "admin") return null; // Viewer cannot see
+  if (role !== "admin") return null;
 
-  const handleSubmit = (e) => {
+  const submit = (e) => {
     e.preventDefault();
-    if (!form.date || !form.amount || !form.category)
-      return alert("Fill all fields");
     addTransaction({ ...form, amount: Number(form.amount) });
     setForm({ date: "", amount: "", category: "", type: "expense" });
   };
 
   return (
-    <div className="card">
+    <form onSubmit={submit} className="card">
       <h3>Add Transaction</h3>
-      <form
-        onSubmit={handleSubmit}
-        className="flex"
-        style={{ flexDirection: "column", gap: "10px" }}
+      <input
+        type="date"
+        value={form.date}
+        onChange={(e) => setForm({ ...form, date: e.target.value })}
+      />
+      <input
+        type="number"
+        placeholder="Amount"
+        value={form.amount}
+        onChange={(e) => setForm({ ...form, amount: e.target.value })}
+      />
+      <input
+        type="text"
+        placeholder="Category"
+        value={form.category}
+        onChange={(e) => setForm({ ...form, category: e.target.value })}
+      />
+      <select
+        value={form.type}
+        onChange={(e) => setForm({ ...form, type: e.target.value })}
       >
-        <input
-          type="date"
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={form.amount}
-          onChange={(e) => setForm({ ...form, amount: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
-        />
-        <select
-          value={form.type}
-          onChange={(e) => setForm({ ...form, type: e.target.value })}
-        >
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <button type="submit">Add</button>
-      </form>
-    </div>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+      <button>Add</button>
+    </form>
   );
-};
-
-export default AddTransaction;
+}

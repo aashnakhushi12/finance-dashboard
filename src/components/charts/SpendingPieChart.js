@@ -1,62 +1,38 @@
 import React, { useContext } from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
 import { AppContext } from "../../context/AppContext";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#AA336A",
-  "#9933FF",
-];
+const COLORS = ["#6366f1", "#f59e0b", "#10b981", "#ef4444"];
 
-const SpendingPieChart = () => {
+export default function SpendingPieChart() {
   const { transactions } = useContext(AppContext);
 
-  // Aggregate expenses by category
-  const expenseData = transactions
-    .filter((t) => t.type === "expense")
-    .reduce((acc, curr) => {
-      const found = acc.find((item) => item.name === curr.category);
-      if (found) found.value += curr.amount;
-      else acc.push({ name: curr.category, value: curr.amount });
-      return acc;
-    }, []);
+  const categoryMap = {};
+
+  transactions.forEach((t) => {
+    if (t.type === "expense") {
+      categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount;
+    }
+  });
+
+  const data = Object.keys(categoryMap).map((key) => ({
+    name: key,
+    value: categoryMap[key],
+  }));
 
   return (
-    <div className="card">
+    <div>
       <h3>Spending by Category</h3>
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
-          <Pie
-            data={expenseData}
-            dataKey="value"
-            nameKey="name"
-            outerRadius={80}
-            fill="#8884d8"
-            label
-          >
-            {expenseData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
+          <Pie data={data} dataKey="value" outerRadius={80} label>
+            {data.map((_, i) => (
+              <Cell key={i} fill={COLORS[i % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip />
-          <Legend />
         </PieChart>
       </ResponsiveContainer>
     </div>
   );
-};
-
-export default SpendingPieChart;
+}
