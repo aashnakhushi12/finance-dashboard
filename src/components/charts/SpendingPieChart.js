@@ -1,4 +1,3 @@
-// src/components/charts/SpendingPieChart.js
 import React, { useContext } from "react";
 import {
   PieChart,

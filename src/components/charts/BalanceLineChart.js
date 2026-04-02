@@ -1,4 +1,3 @@
-// src/components/charts/BalanceLineChart.js
 import React, { useContext } from "react";
 import {
   LineChart,
